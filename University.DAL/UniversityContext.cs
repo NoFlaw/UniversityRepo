@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using University.DAL.Models;
 
 
@@ -16,6 +11,7 @@ namespace University.DAL
         public UniversityContext()
             : base("UniversityContext")
         {
+            var _ = typeof (System.Data.Entity.SqlServer.SqlProviderServices);
         }
 
         public DbSet<Course> Courses { get; set; }

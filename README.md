@@ -11,6 +11,7 @@ First upload of project having necessary files. Code first approach with seeding
 UPDATES TO COME
 ===============
 
+Full wire up of application having all views and functionality of a university-like web application,
 StructureMap,
 Automapper,
 jQuery Libraries,

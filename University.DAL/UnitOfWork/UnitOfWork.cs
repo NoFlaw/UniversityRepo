@@ -1,57 +1,40 @@
 ﻿using System;
+using System.Data.Entity;
 using University.DAL.Models;
 using University.DAL.Repository;
 
 namespace University.DAL.UnitOfWork
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private bool _disposed;
+        private readonly UniversityContext _context;
 
-        private readonly UniversityContext _context = new UniversityContext();
-        
-        private GenericRepository<Course> _courseRepository;
-        private GenericRepository<Department> _departmentRepository;
-        private GenericRepository<Enrollment> _enrollmentRepository;
-        private GenericRepository<Instructor> _instructorRepository;
-        private GenericRepository<OfficeAssignment> _officeAssignmentRepository; 
-        private GenericRepository<Student> _studentRepository;
-        
-        public GenericRepository<Course> CourseRepository
+        public UnitOfWork(UniversityContext context)
         {
-            get { return _courseRepository ?? (_courseRepository = new GenericRepository<Course>(_context)); }
+            _context = context;
         }
 
-        public GenericRepository<Department> DepartmentRepository
+        internal DbSet<T> GetDbSet<T>() where T : class
         {
-            get { return _departmentRepository ?? (_departmentRepository = new GenericRepository<Department>(_context)); }
+            return _context.Set<T>();
         }
 
-        public GenericRepository<Enrollment> EnrollmentRepository
+        public void Commit()
         {
-            get { return _enrollmentRepository ?? (_enrollmentRepository = new GenericRepository<Enrollment>(_context)); }
+            _context.SaveChanges();
         }
 
-        public GenericRepository<Instructor> InstructorRepository
+        public void Dispose()
         {
-            get { return _instructorRepository ?? (_instructorRepository = new GenericRepository<Instructor>(_context)); }
-        }
-
-        public GenericRepository<OfficeAssignment> OfficeAssignmentRepository
-        {
-            get { return _officeAssignmentRepository ?? (_officeAssignmentRepository = new GenericRepository<OfficeAssignment>(_context)); }
-        }
-
-        public GenericRepository<Student> StudentRepository
-        {
-            get { return _studentRepository ?? (_studentRepository = new GenericRepository<Student>(_context)); }
+            _context.Dispose();
         }
 
         public void Save()
         {
             _context.SaveChanges();
         }
-        
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
@@ -59,16 +42,12 @@ namespace University.DAL.UnitOfWork
                 if (disposing)
                 {
                     _context.Dispose();
+                    GC.SuppressFinalize(this);
                 }
             }
             _disposed = true;
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 
 }

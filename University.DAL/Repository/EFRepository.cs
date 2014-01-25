@@ -13,14 +13,14 @@ namespace University.DAL.Repository
     ///     Common functionality in the Entity Framework DbContext class is invoked.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class EfRepository<T> : IRepositoryBase<T> where T : class
+    public class EfRepository<T> : IRepositoryBase<T> where T : class
     {
         private static readonly PropertyIncluder<T> Includer = new PropertyIncluder<T>();
 
         /// <summary>
         ///     The Entity Framework DbContext object.
         /// </summary>
-        protected UniversityContext Context;
+        private readonly UniversityContext _context;
 
         private readonly DbSet<T> _dbSet;
 
@@ -29,9 +29,9 @@ namespace University.DAL.Repository
         /// </summary>
         /// <param name="context">The context.</param>
         /// <exception cref="System.ArgumentException">context is null</exception>
-        protected EfRepository(UniversityContext context)
+        protected internal EfRepository(UniversityContext context)
         {
-            Context = context;
+            _context = context;
 
             if (context == null)
                 throw new ArgumentException("context is null");
@@ -110,7 +110,7 @@ namespace University.DAL.Repository
         /// <param name="entity">The entity.</param>
         public virtual void Remove(T entity)
         {
-            if (Context.Entry(entity).State == EntityState.Detached)
+            if (_context.Entry(entity).State == EntityState.Detached)
             {
                 _dbSet.Attach(entity);
             }

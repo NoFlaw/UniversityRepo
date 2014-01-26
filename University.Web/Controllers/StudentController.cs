@@ -33,12 +33,12 @@ namespace University.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = _db.Students.Find(id);
-            if (student == null)
+            var studentDetail = StudentService.FindById(id);
+            if (studentDetail == null)
             {
                 return HttpNotFound();
             }
-            return View(student);
+            return View(studentDetail);
         }
 
         // GET: /Student/Create

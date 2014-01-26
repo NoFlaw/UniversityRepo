@@ -21,5 +21,10 @@ namespace University.Business.Services.Student
         {
             return _unitOfWork.StudentRepository.Get().ToList();
         }
+
+        public DAL.Models.Student FindById(int? id)
+        {
+            return _unitOfWork.StudentRepository.FindById(id);
+        }
     }
 }

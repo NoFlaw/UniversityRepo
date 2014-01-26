@@ -20,8 +20,11 @@ namespace University.DAL.Repository
         /// <summary>
         ///     The Entity Framework DbContext object.
         /// </summary>
-        private readonly UniversityContext _context;
+        private readonly UniversityContext _context = new UniversityContext();
 
+        /// <summary>
+        ///     Collection of All Entities within the context.
+        /// </summary>
         private readonly DbSet<T> _dbSet;
 
         /// <summary>
@@ -36,13 +39,38 @@ namespace University.DAL.Repository
             if (context == null)
                 throw new ArgumentException("context is null");
             
-            var unitOfWork = new UnitOfWork.UnitOfWork(context);
+            var unitOfWork = new UnitOfWork.UnitOfWork();
             
             if (unitOfWork == null)
                 throw new ArgumentException("UnitOfWorkContext is null");
 
             _dbSet = unitOfWork.GetDbSet<T>();
         }
+
+        public void Add(T entity)
+        {
+            _dbSet.Add(entity);
+        }
+
+
+        public virtual IEnumerable<T> Get(
+           Expression<Func<T, bool>> filter = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+           string includeProperties = "")
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            query = includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+            return orderBy != null ? orderBy(query).ToList() : query.ToList();
+        }
+
+
 
         /// <summary>
         ///     Gets a count of TEntity
@@ -116,6 +144,11 @@ namespace University.DAL.Repository
             }
 
             _dbSet.Remove(entity);
+        }
+
+        public void DeleteById(object id)
+        {
+            throw new NotImplementedException();
         }
 
     }

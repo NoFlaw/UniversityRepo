@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,6 +8,14 @@ namespace University.DAL.Repository
 {
     public interface IRepositoryBase<T> where T : class
     {
+
+        /// <summary>
+        /// Adds specified entity from the entity collection in preparation for a addition.
+        /// No changes are persisted to the database until the Save is called.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        void Add(T entity);
+
         /// <summary>
         /// Gets a count of TEntity
         /// </summary>
@@ -51,6 +60,15 @@ namespace University.DAL.Repository
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Remove(T entity);
+
+        void DeleteById(object id);
+
+        IEnumerable<T> Get(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = ""
+            );
+
 
     }
 }

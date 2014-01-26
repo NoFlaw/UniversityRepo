@@ -8,7 +8,7 @@ namespace University.DAL.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private bool _disposed;
-        private readonly UniversityContext _context;
+        private readonly UniversityContext _context = new UniversityContext();
         private EfRepository<Course> _courseRepository;
         private EfRepository<Department> _departmentRepository;
         private EfRepository<Enrollment> _enrollmentRepository;
@@ -47,11 +47,6 @@ namespace University.DAL.UnitOfWork
             get { return _studentRepository ?? (_studentRepository = new EfRepository<Student>(_context)); }
         }
 
-        public UnitOfWork(UniversityContext context)
-        {
-            _context = context;
-        }
-
         internal DbSet<T> GetDbSet<T>() where T : class
         {
             return _context.Set<T>();
@@ -65,11 +60,6 @@ namespace University.DAL.UnitOfWork
         public void Dispose()
         {
             _context.Dispose();
-        }
-
-        public void Save()
-        {
-            _context.SaveChanges();
         }
 
         protected virtual void Dispose(bool disposing)

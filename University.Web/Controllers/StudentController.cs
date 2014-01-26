@@ -1,20 +1,29 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using University.Business.Services.Student;
 using University.DAL;
 using University.DAL.Models;
+using University.DAL.UnitOfWork;
 
 namespace University.Web.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly UniversityContext db = new UniversityContext();
+        private readonly UniversityContext _db = new UniversityContext();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+        public StudentService StudentService;
+
+        public StudentController()
+        {
+            StudentService = new StudentService(_unitOfWork);
+        }
 
         // GET: /Student/
         public ActionResult Index()
         {
-            return View(db.Students.ToList());
+            var students = StudentService.GetAll(); 
+            return View(students);
         }
 
         // GET: /Student/Details/5
@@ -24,7 +33,7 @@ namespace University.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            Student student = _db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -47,8 +56,8 @@ namespace University.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Students.Add(student);
-                db.SaveChanges();
+                _db.Students.Add(student);
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -62,7 +71,7 @@ namespace University.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            Student student = _db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -79,8 +88,8 @@ namespace University.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(student).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(student).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(student);
@@ -93,7 +102,7 @@ namespace University.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            Student student = _db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -106,9 +115,9 @@ namespace University.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
+            Student student = _db.Students.Find(id);
+            _db.Students.Remove(student);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -116,7 +125,7 @@ namespace University.Web.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

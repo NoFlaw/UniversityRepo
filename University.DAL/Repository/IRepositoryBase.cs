@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace University.DAL.Repository
 {
@@ -15,7 +17,29 @@ namespace University.DAL.Repository
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Add(T entity);
-
+        
+        /// <summary>
+        /// //TODO:Fill In Summary 
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        T Find(params object[] keyValues);
+        
+        /// <summary>
+        /// //TODO:Fill In Summary 
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        Task<T> FindAsync(params object[] keyValues);
+        
+        /// <summary>
+        /// //TODO:Fill In Summary 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        Task<T> FindAsync(CancellationToken cancellationToken, params object[] keyValues);
+        
         /// <summary>
         /// Gets a count of TEntity
         /// </summary>
@@ -34,7 +58,7 @@ namespace University.DAL.Repository
         /// <param name="id">The id.</param>
         /// <param name="includes">The includes.</param>
         /// <returns></returns>
-        T FindById(object id, params Expression<Func<T, object>>[] includes);
+        //T FindById(object id, params Expression<Func<T, object>>[] includes);
 
         /// <summary>
         ///     Gets all of the entities from the database, with optional set of eager includes.
@@ -59,9 +83,10 @@ namespace University.DAL.Repository
         ///     No changes are persisted to the database until the Save is called.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        void Remove(T entity);
+        void Delete(T entity);
 
-        void DeleteById(object id);
+        void Delete(object id);
+        //void Delete(T entity);
 
         IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,

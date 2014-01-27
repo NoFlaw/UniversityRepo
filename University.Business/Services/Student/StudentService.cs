@@ -24,7 +24,7 @@ namespace University.Business.Services.Student
 
         public DAL.Models.Student FindById(int? id)
         {
-            return _unitOfWork.StudentRepository.FindById(id);
+            return _unitOfWork.StudentRepository.Find(id);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace University.Web.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly UniversityContext _db = new UniversityContext();
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+        private static readonly UniversityContext _db = new UniversityContext();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork(_db);
         public StudentService StudentService;
 
         public StudentController()

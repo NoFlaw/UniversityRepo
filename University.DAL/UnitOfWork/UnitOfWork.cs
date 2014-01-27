@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 using University.DAL.Models;
 using University.DAL.Repository;
 
@@ -7,6 +10,9 @@ namespace University.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
+        
+        #region private variables
+        
         private bool _disposed;
         private readonly UniversityContext _context = new UniversityContext();
         private EfRepository<Course> _courseRepository;
@@ -14,8 +20,41 @@ namespace University.DAL.UnitOfWork
         private EfRepository<Enrollment> _enrollmentRepository;
         private EfRepository<Instructor> _instructorRepository;
         private EfRepository<OfficeAssignment> _officeAssignmentRepository;
+        private readonly Guid _instanceId;
         private EfRepository<Student> _studentRepository;
+        private Hashtable _repositories;
 
+        public UnitOfWork(UniversityContext context)
+        {
+            _instanceId = Guid.NewGuid();
+        }
+
+        #endregion 
+        
+        public Guid InstanceId
+        {
+            get { return _instanceId; }
+        }
+
+        public IRepositoryBase<TEntity> Repository<TEntity>() where TEntity : EntityBase
+        {
+            if (_repositories == null)
+            {
+                _repositories = new Hashtable();
+            }
+
+            var type = typeof(TEntity).Name;
+
+            if (_repositories.ContainsKey(type))
+            {
+                return (IRepositoryBase<TEntity>)_repositories[type];
+            }
+
+            var repositoryType = typeof(EfRepository<>);
+            _repositories.Add(type, Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _context));
+
+            return (IRepositoryBase<TEntity>)_repositories[type];
+        }
 
         public EfRepository<Course> CourseRepository
         {
@@ -60,19 +99,28 @@ namespace University.DAL.UnitOfWork
         public void Dispose()
         {
             _context.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
+        {        
+                if (!_disposed && disposing)
                 {
                     _context.Dispose();
-                    GC.SuppressFinalize(this);
+                    
                 }
-            }
+           
             _disposed = true;
+        }
+
+        public Task<int> SaveAsync()
+        {
+            return _context.SaveChangesAsync();
+        }
+
+        public Task<int> SaveAsync(CancellationToken cancellationToken)
+        {
+            return _context.SaveChangesAsync(cancellationToken);
         }
 
     }

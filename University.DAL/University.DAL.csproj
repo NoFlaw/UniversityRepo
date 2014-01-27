@@ -64,7 +64,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyIncluder.cs" />
     <Compile Include="Repository\EfRepository.cs" />
+    <Compile Include="Repository\EntityBase.cs" />
+    <Compile Include="Repository\IObjectState.cs" />
     <Compile Include="Repository\IRepositoryBase.cs" />
+    <Compile Include="Repository\ObjectState.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="UniversityContext.cs" />

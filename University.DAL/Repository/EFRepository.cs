@@ -5,6 +5,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace University.DAL.Repository
 {
@@ -27,6 +29,8 @@ namespace University.DAL.Repository
         /// </summary>
         private readonly DbSet<T> _dbSet;
 
+        private readonly Guid _instanceId;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="EfRepository{T}" /> class.
         /// </summary>
@@ -39,18 +43,76 @@ namespace University.DAL.Repository
             if (context == null)
                 throw new ArgumentException("context is null");
             
-            var unitOfWork = new UnitOfWork.UnitOfWork();
+            var unitOfWork = new UnitOfWork.UnitOfWork(_context);
             
             if (unitOfWork == null)
                 throw new ArgumentException("UnitOfWorkContext is null");
 
             _dbSet = unitOfWork.GetDbSet<T>();
+
+            _instanceId = Guid.NewGuid();
+        }
+
+        public Guid InstanceId
+        {
+            get { return _instanceId; }
         }
 
         public void Add(T entity)
         {
             _dbSet.Add(entity);
         }
+
+        public virtual T Find(params object[] keyValues)
+        {
+            return _dbSet.Find(keyValues);
+        }
+
+        public virtual async Task<T> FindAsync(params object[] keyValues)
+        {
+            return await _dbSet.FindAsync( keyValues);
+        }
+
+        public virtual async Task<T> FindAsync(CancellationToken cancellationToken, params object[] keyValues)
+        {
+            return await _dbSet.FindAsync(cancellationToken, keyValues);
+        }
+
+        internal async Task<IEnumerable<T>> GetAsync(
+           Expression<Func<T, bool>> filter = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+           List<Expression<Func<T, object>>> includeProperties = null,
+           int? page = null,
+           int? pageSize = null)
+        {
+            return this.Get(filter, orderBy, includeProperties).AsEnumerable();
+        }
+
+        internal IQueryable<T> Get(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            List<Expression<Func<T, object>>> includeProperties = null,
+            int? page = null,
+            int? pageSize = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (includeProperties != null)
+                includeProperties.ForEach(i => query = query.Include(i));
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            if (page != null && pageSize != null)
+                query = query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
+
+            return query;
+        }
+
+
 
 
         public virtual IEnumerable<T> Get(
@@ -93,22 +155,22 @@ namespace University.DAL.Repository
         /// <param name="id">The id.</param>
         /// <param name="includes">The includes.</param>
         /// <returns></returns>
-        public virtual T FindById(object id, params Expression<Func<T, object>>[] includes)
-        {
-            if (includes.Any())
-            {
-                throw new ArgumentException(
-                    "Includes are not handled for FindById when using default implementation of EfRepository.  Please override FindById method in derived class",
-                    "includes");
-            }
-            if (Includer.HasIncludes)
-            {
-                throw new ArgumentException(
-                    string.Format("Member of {0} marked with Include attribute. Please override FindById method in derived class", typeof(T).Name),
-                    "includes");
-            }
-            return _dbSet.Find(id);
-        }
+        //public virtual T FindById(object id, params Expression<Func<T, object>>[] includes)
+        //{
+        //    if (includes.Any())
+        //    {
+        //        throw new ArgumentException(
+        //            "Includes are not handled for FindById when using default implementation of EfRepository.  Please override FindById method in derived class",
+        //            "includes");
+        //    }
+        //    if (Includer.HasIncludes)
+        //    {
+        //        throw new ArgumentException(
+        //            string.Format("Member of {0} marked with Include attribute. Please override FindById method in derived class", typeof(T).Name),
+        //            "includes");
+        //    }
+        //    return _dbSet.Find(id);
+        //}
 
         public virtual IQueryable<T> AllIncluding(params Expression<Func<T, object>>[] includes)
         {
@@ -136,7 +198,7 @@ namespace University.DAL.Repository
         ///     No changes are persisted to the database until the Save is called.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public virtual void Remove(T entity)
+        public virtual void Delete(T entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
             {
@@ -146,9 +208,10 @@ namespace University.DAL.Repository
             _dbSet.Remove(entity);
         }
 
-        public void DeleteById(object id)
+        public virtual void Delete(object id)
         {
-            throw new NotImplementedException();
+            var entityToDelete = _dbSet.Find(id);
+            Delete(entityToDelete);
         }
 
     }

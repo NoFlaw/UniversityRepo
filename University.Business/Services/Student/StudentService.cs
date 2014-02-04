@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using University.DAL.UnitOfWork;
-
+using Model = University.DAL.Models;
 namespace University.Business.Services.Student
 {    
     public class StudentService
@@ -17,12 +17,12 @@ namespace University.Business.Services.Student
         /// Returns all students within given Student Table
         /// </summary>
         /// <returns></returns>
-        public List<DAL.Models.Student> GetAll()
+        public List<Model.Student> GetAll()
         {
             return _unitOfWork.StudentRepository.Get().ToList();
         }
 
-        public DAL.Models.Student FindById(int? id)
+        public Model.Student FindById(int? id)
         {
             return _unitOfWork.StudentRepository.Find(id);
         }

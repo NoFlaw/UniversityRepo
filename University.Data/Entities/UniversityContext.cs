@@ -10,7 +10,7 @@ namespace University.Data.Entities
         public UniversityContext()
             : base("UniversityContext")
         {
-            //var _ = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
+            var _ = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
         }
 
         public DbSet<Course> Courses { get; set; }

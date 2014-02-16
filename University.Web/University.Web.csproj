@@ -277,10 +277,6 @@
       <Project>{72853012-e9f6-4464-b2a7-16147b90a93a}</Project>
       <Name>University.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\University.DAL\University.DAL.csproj">
-      <Project>{2a4e0f51-8d5f-4a1a-a9f5-eca2600b345c}</Project>
-      <Name>University.DAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\University.Data\University.Data.csproj">
       <Project>{b973bdfd-bda0-4141-8c8e-24add5f63e28}</Project>
       <Name>University.Data</Name>

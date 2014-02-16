@@ -33,7 +33,7 @@ namespace University.Data.Initialization
             Database.SetInitializer<UniversityContext>(new UniversityDBInitializer());
 
             //Checks current context, model, & connection for changes
-            context.Database.Initialize(false);
+            //context.Database.Initialize(false);
 
             context.Dispose();
 

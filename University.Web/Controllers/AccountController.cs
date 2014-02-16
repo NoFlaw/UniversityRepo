@@ -4,7 +4,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using University.DAL.Models;
+
+using University.Data.Entities.Models;
 using University.Web.Models;
 
 namespace University.Web.Controllers

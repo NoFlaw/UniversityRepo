@@ -1,30 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using University.DAL.UnitOfWork;
-using Model = University.DAL.Models;
+using StructureMap;
+using University.Data.Repository.Base;
+
+using Models = University.Data.Entities.Models;
+
 namespace University.Business.Services.Student
 {    
-    public class StudentService
+    public static class StudentService
     {
-        private readonly UnitOfWork _unitOfWork;
-
-        public StudentService(UnitOfWork unitOfWork)
+        //Get an instance of Students
+        private static IRepository<Models.Student> StudentRepository
         {
-            _unitOfWork = unitOfWork;
+            get { return ObjectFactory.GetInstance<IRepository<Models.Student>>(); }
         }
 
         /// <summary>
         /// Returns all students within given Student Table
         /// </summary>
         /// <returns></returns>
-        public List<Model.Student> GetAll()
+        public static List<Models.Student> GetAll()
         {
-            return _unitOfWork.StudentRepository.Get().ToList();
+            return StudentRepository.GetAll().ToList();
         }
 
-        public Model.Student FindById(int id)
+        public static Models.Student FindById(int id)
         {
-            return _unitOfWork.StudentRepository.FindById(id);
+            return StudentRepository.GetById(id);
         }
     }
 }

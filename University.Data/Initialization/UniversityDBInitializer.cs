@@ -8,7 +8,7 @@ using University.Data.Entities.Models;
 
 namespace University.Data.Initialization
 {
-    class UniversityDBInitializer : DropCreateDatabaseIfModelChanges<UniversityContext>
+    class UniversityDBInitializer : DropCreateDatabaseAlways<UniversityContext>
     {
         protected override void Seed(UniversityContext context)
         {

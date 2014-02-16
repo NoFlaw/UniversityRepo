@@ -1,11 +1,9 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Net;
 using System.Web.Mvc;
 using University.Business.Services.Student;
-using University.DAL;
-using University.DAL.Models;
-using University.DAL.UnitOfWork;
+using University.Data.Entities;
+using University.Data.Entities.Models;
 
 namespace University.Web.Controllers
 {
@@ -13,14 +11,6 @@ namespace University.Web.Controllers
     {
         private static readonly UniversityContext _db = new UniversityContext();
        
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork(_db);
-        public StudentService StudentService;
-
-        public StudentController()
-        {
-            StudentService = new StudentService(_unitOfWork);
-        }
-
         // GET: /Student/
         public ActionResult Index()
         {

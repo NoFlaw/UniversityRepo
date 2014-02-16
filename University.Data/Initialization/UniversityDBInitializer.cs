@@ -14,21 +14,21 @@ namespace University.Data.Initialization
         {
             var students = new List<Student>
             {
-                new Student { FirstMidName = "Carson",   LastName = "Alexander", 
+                new Student { FirstName = "Carson",   LastName = "Alexander", 
                     EnrollmentDate = DateTime.Parse("2010-09-01") },
-                new Student { FirstMidName = "Meredith", LastName = "Alonso",    
+                new Student { FirstName = "Meredith", LastName = "Alonso",    
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Arturo",   LastName = "Anand",     
+                new Student { FirstName = "Arturo",   LastName = "Anand",     
                     EnrollmentDate = DateTime.Parse("2013-09-01") },
-                new Student { FirstMidName = "Gytis",    LastName = "Barzdukas", 
+                new Student { FirstName = "Gytis",    LastName = "Barzdukas", 
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Yan",      LastName = "Li",        
+                new Student { FirstName = "Yan",      LastName = "Li",        
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Peggy",    LastName = "Justice",   
+                new Student { FirstName = "Peggy",    LastName = "Justice",   
                     EnrollmentDate = DateTime.Parse("2011-09-01") },
-                new Student { FirstMidName = "Laura",    LastName = "Norman",    
+                new Student { FirstName = "Laura",    LastName = "Norman",    
                     EnrollmentDate = DateTime.Parse("2013-09-01") },
-                new Student { FirstMidName = "Nino",     LastName = "Olivetto",  
+                new Student { FirstName = "Nino",     LastName = "Olivetto",  
                     EnrollmentDate = DateTime.Parse("2005-09-01") }
             };
 

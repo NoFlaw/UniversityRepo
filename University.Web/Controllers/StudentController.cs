@@ -39,28 +39,24 @@ namespace University.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,LastName,FirstName,EnrollmentDate")] Student student)
         {
-            if (ModelState.IsValid)
-            {
-                StudentService.Add(student);
-                UnitOfWork.Save();
-                return RedirectToAction("Index");
-            }
+            if (!ModelState.IsValid)
+                return View(student);
+ 
+            StudentService.Add(student);
+            UnitOfWork.Save();
 
-            return View(student);
+            return RedirectToAction("Index");
+            
         }
 
         // GET: /Student/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = _db.Students.Find(id);
+            var student = StudentService.FindById(id);
+
             if (student == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(student);
         }
 
@@ -71,13 +67,14 @@ namespace University.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,LastName,FirstName,EnrollmentDate")] Student student)
         {
-            if (ModelState.IsValid)
-            {
-                _db.Entry(student).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(student);
+            if (!ModelState.IsValid)
+                return View(student);
+
+            StudentService.UpdateStudent(student);
+
+            UnitOfWork.Save();
+            
+            return RedirectToAction("Index");
         }
 
         // GET: /Student/Delete/5

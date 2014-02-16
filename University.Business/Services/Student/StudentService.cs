@@ -1,4 +1,5 @@
 ﻿using System;
+using StructureMap.Diagnostics;
 using University.Data.Entities.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,5 +49,14 @@ namespace University.Business
             
             return true;
         }
+        /// <summary>
+        /// Attaches current student to objectgraph, must call save changes.
+        /// </summary>
+        /// <param name="student"></param>
+        public static void UpdateStudent(Student student)
+        {
+            StudentRepository.Update(student);
+        }
+
     }
 }

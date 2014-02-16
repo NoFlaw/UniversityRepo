@@ -2,11 +2,7 @@
 using System.Data.Entity;
 using StructureMap;
 using University.Data.Entities;
-using University.Data.Repository;
-using University.Data.Repository.Base;
 using University.Data.UnitOfWork;
-using University.Data.UnitOfWork.Base;
-
 
 namespace University.Data.Initialization
 {
@@ -14,15 +10,6 @@ namespace University.Data.Initialization
     {
         public static void Initialize()
         {
-            ////Hook up the interception
-            //ObjectFactory.Initialize(
-            //    x =>
-            //    {
-            //        //x.For<IUnitOfWorkFactory>().Use<EFUnitOfWorkFactory>();
-            //        //x.For(typeof(IRepository<>)).Use(typeof(EFRepository<>));
-            //    }
-            //);
-
             //Tell the concrete factory what EF model to use
             EFUnitOfWorkFactory.SetObjectContext(() => new UniversityContext());
 
@@ -36,7 +23,6 @@ namespace University.Data.Initialization
             //context.Database.Initialize(false);
 
             context.Dispose();
-
         }
 
         public static void Save()

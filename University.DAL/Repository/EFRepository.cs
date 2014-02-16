@@ -148,29 +148,10 @@ namespace University.DAL.Repository
             return _dbSet.Where(predicate).Count();
         }
 
-        /// <summary>
-        ///     The base version uses the built in EntityFramework Find method.
-        ///     The params expressions are ignored.
-        /// </summary>
-        /// <param name="id">The id.</param>
-        /// <param name="includes">The includes.</param>
-        /// <returns></returns>
-        //public virtual T FindById(object id, params Expression<Func<T, object>>[] includes)
-        //{
-        //    if (includes.Any())
-        //    {
-        //        throw new ArgumentException(
-        //            "Includes are not handled for FindById when using default implementation of EfRepository.  Please override FindById method in derived class",
-        //            "includes");
-        //    }
-        //    if (Includer.HasIncludes)
-        //    {
-        //        throw new ArgumentException(
-        //            string.Format("Member of {0} marked with Include attribute. Please override FindById method in derived class", typeof(T).Name),
-        //            "includes");
-        //    }
-        //    return _dbSet.Find(id);
-        //}
+        public T FindById(object id)
+        {
+            return _dbSet.Find(id);
+        }
 
         public virtual IQueryable<T> AllIncluding(params Expression<Func<T, object>>[] includes)
         {
@@ -208,10 +189,16 @@ namespace University.DAL.Repository
             _dbSet.Remove(entity);
         }
 
+
+        /// <summary>
+        ///     Removes specified entity from the entity collection by ID in preparation for a delete.
+        ///     No changes are persisted to the database until the Save is called.
+        /// </summary>
+        /// <param name="id">The entity.</param>
         public virtual void Delete(object id)
         {
-            var entityToDelete = _dbSet.Find(id);
-            Delete(entityToDelete);
+            var entity = FindById(id);
+            Delete(entity);
         }
 
     }

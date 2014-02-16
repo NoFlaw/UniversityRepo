@@ -56,9 +56,7 @@ namespace University.DAL.Repository
         ///     Finds the Entity by the primary key id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="includes">The includes.</param>
-        /// <returns></returns>
-        //T FindById(object id, params Expression<Func<T, object>>[] includes);
+        T FindById(object id);
 
         /// <summary>
         ///     Gets all of the entities from the database, with optional set of eager includes.
@@ -85,8 +83,12 @@ namespace University.DAL.Repository
         /// <param name="entity">The entity.</param>
         void Delete(T entity);
 
+        /// <summary>
+        ///     Removes specified entity from the entity collection by id in preparation for a delete.
+        ///     No changes are persisted to the database until the Save is called.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         void Delete(object id);
-        //void Delete(T entity);
 
         IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,

@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Net;
 using System.Web.Mvc;
 using University.Business.Services.Student;
@@ -11,6 +12,7 @@ namespace University.Web.Controllers
     public class StudentController : Controller
     {
         private static readonly UniversityContext _db = new UniversityContext();
+       
         private readonly UnitOfWork _unitOfWork = new UnitOfWork(_db);
         public StudentService StudentService;
 
@@ -27,12 +29,8 @@ namespace University.Web.Controllers
         }
 
         // GET: /Student/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var studentDetail = StudentService.FindById(id);
             if (studentDetail == null)
             {

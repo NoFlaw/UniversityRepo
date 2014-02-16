@@ -96,6 +96,11 @@ namespace University.DAL.UnitOfWork
             _context.SaveChanges();
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Dispose()
         {
             _context.Dispose();

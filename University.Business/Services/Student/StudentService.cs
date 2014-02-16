@@ -22,9 +22,9 @@ namespace University.Business.Services.Student
             return _unitOfWork.StudentRepository.Get().ToList();
         }
 
-        public Model.Student FindById(int? id)
+        public Model.Student FindById(int id)
         {
-            return _unitOfWork.StudentRepository.Find(id);
+            return _unitOfWork.StudentRepository.FindById(id);
         }
     }
 }

@@ -14,14 +14,14 @@ namespace University.Data.Initialization
     {
         public static void Initialize()
         {
-            //Hook up the interception
-            ObjectFactory.Initialize(
-                x =>
-                {
-                    x.For<IUnitOfWorkFactory>().Use<EFUnitOfWorkFactory>();
-                    x.For(typeof(IRepository<>)).Use(typeof(EFRepository<>));
-                }
-            );
+            ////Hook up the interception
+            //ObjectFactory.Initialize(
+            //    x =>
+            //    {
+            //        //x.For<IUnitOfWorkFactory>().Use<EFUnitOfWorkFactory>();
+            //        //x.For(typeof(IRepository<>)).Use(typeof(EFRepository<>));
+            //    }
+            //);
 
             //Tell the concrete factory what EF model to use
             EFUnitOfWorkFactory.SetObjectContext(() => new UniversityContext());

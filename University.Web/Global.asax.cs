@@ -16,7 +16,7 @@ namespace University.Web
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            //ObjectFactory Init
+            
             ResourceManager.Initialize();
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory(new Container()));
 

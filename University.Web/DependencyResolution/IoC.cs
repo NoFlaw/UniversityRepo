@@ -17,6 +17,11 @@
 
 
 using StructureMap;
+using University.Data.Repository;
+using University.Data.Repository.Base;
+using University.Data.UnitOfWork;
+using University.Data.UnitOfWork.Base;
+
 namespace University.Web.DependencyResolution {
     public static class IoC {
         public static IContainer Initialize() {
@@ -27,7 +32,10 @@ namespace University.Web.DependencyResolution {
                                         scan.TheCallingAssembly();
                                         scan.WithDefaultConventions();
                                     });
-            //                x.For<IExample>().Use<Example>();
+                       
+                            x.For<IUnitOfWorkFactory>().Use<EFUnitOfWorkFactory>();
+                            x.For(typeof(IRepository<>)).Use(typeof(EFRepository<>));
+
                         });
             return ObjectFactory.Container;
         }

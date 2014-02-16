@@ -1,32 +1,29 @@
 ﻿using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
-using University.Business.Services.Student;
+using University.Business;
 using University.Data.Entities;
 using University.Data.Entities.Models;
+using University.Data.UnitOfWork;
 
 namespace University.Web.Controllers
 {
     public class StudentController : Controller
     {
         private static readonly UniversityContext _db = new UniversityContext();
-       
+     
         // GET: /Student/
         public ActionResult Index()
         {
-            var students = StudentService.GetAll(); 
+            var students = StudentService.GetAllStudents(); 
             return View(students);
         }
 
         // GET: /Student/Details/5
         public ActionResult Details(int id)
         {
-            var studentDetail = StudentService.FindById(id);
-            if (studentDetail == null)
-            {
-                return HttpNotFound();
-            }
-            return View(studentDetail);
+            var student = StudentService.FindById(id);
+            return student == null ? (ActionResult)HttpNotFound() : View(student);
         }
 
         // GET: /Student/Create
@@ -44,8 +41,8 @@ namespace University.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Students.Add(student);
-                _db.SaveChanges();
+                StudentService.Add(student);
+                UnitOfWork.Save();
                 return RedirectToAction("Index");
             }
 

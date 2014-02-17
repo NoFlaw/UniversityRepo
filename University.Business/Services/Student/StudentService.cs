@@ -1,8 +1,6 @@
 ﻿using System;
-using StructureMap.Diagnostics;
 using University.Data.Entities.Models;
 using System.Collections.Generic;
-using System.Linq;
 using StructureMap;
 using University.Data.Repository.Base;
 
@@ -53,10 +51,30 @@ namespace University.Business
         /// Attaches current student to objectgraph, must call save changes.
         /// </summary>
         /// <param name="student"></param>
-        public static void UpdateStudent(Student student)
+        public static bool UpdateStudent(Student student)
         {
+            if (String.IsNullOrEmpty(student.FirstName) || String.IsNullOrEmpty(student.LastName))
+                return false;
+
             StudentRepository.Update(student);
+
+            return true;
         }
 
+
+        /// <summary>
+        /// Returning boolean result from removing the student
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns></returns>
+        public static bool Delete(Student student)
+        {
+            if (String.IsNullOrEmpty(student.FirstName) || String.IsNullOrEmpty(student.LastName))
+                return false;
+
+            StudentRepository.Delete(student);
+
+            return true;
+        }
     }
 }

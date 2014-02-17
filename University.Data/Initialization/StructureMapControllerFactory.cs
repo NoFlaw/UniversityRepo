@@ -7,31 +7,14 @@ namespace University.Data.Initialization
 {
     public class StructureMapControllerFactory : DefaultControllerFactory
     {
-        public IContainer Container;
-
-        public StructureMapControllerFactory(IContainer container)
-        {
-            Container = container;
-        }
-
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
-            try
-            {
-                //if ((requestContext == null) || (controllerType == null))
-                    return Container.GetInstance(controllerType) as Controller;
-            }
-            catch (StructureMapException)
-            {
-                System.Diagnostics.Debug.WriteLine(Container.WhatDoIHave());
-                throw;
-            }
-        }
+            if ((requestContext == null) || (controllerType == null))
+                    return base.GetControllerInstance(requestContext, (controllerType));
 
-        public override void ReleaseController(IController controller)
-        {
-            base.ReleaseController(controller);
+            return (Controller) ObjectFactory.GetInstance(controllerType);
+
         }
-        
+       
     }
 }

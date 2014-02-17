@@ -24,7 +24,7 @@ namespace University.Data.Repository.Base
         T Single(Expression<Func<T, bool>> where);
 
         /// <summary>
-        ///   Returns FirstOrDefault that satisfies the where clause
+        ///   Returns First that satisfies the where clause
         /// </summary>
         /// <param name="where"> takes an nullable condition </param>
         T First(Expression<Func<T, bool>> where);

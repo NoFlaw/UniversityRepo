@@ -1,6 +1,4 @@
-﻿using System.Data.Entity;
-using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using University.Business;
 using University.Data.Entities;
 using University.Data.Entities.Models;
@@ -10,8 +8,8 @@ namespace University.Web.Controllers
 {
     public class StudentController : Controller
     {
-        private static readonly UniversityContext _db = new UniversityContext();
-     
+        private static readonly UniversityContext Context = new UniversityContext();
+    
         // GET: /Student/
         public ActionResult Index()
         {
@@ -43,6 +41,7 @@ namespace University.Web.Controllers
                 return View(student);
  
             StudentService.Add(student);
+            
             UnitOfWork.Save();
 
             return RedirectToAction("Index");
@@ -78,17 +77,13 @@ namespace University.Web.Controllers
         }
 
         // GET: /Student/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = _db.Students.Find(id);
+            var student = StudentService.FindById(id);
+
             if (student == null)
-            {
                 return HttpNotFound();
-            }
+          
             return View(student);
         }
 
@@ -97,18 +92,20 @@ namespace University.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Student student = _db.Students.Find(id);
-            _db.Students.Remove(student);
-            _db.SaveChanges();
+            var student = StudentService.FindById(id);
+
+            StudentService.Delete(student);
+
+            UnitOfWork.Save();
+            
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
-                _db.Dispose();
-            }
+                Context.Dispose();
+           
             base.Dispose(disposing);
         }
     }

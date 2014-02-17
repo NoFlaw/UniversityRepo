@@ -15,8 +15,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
+using University.Data.Entities.Models;
 using University.Data.Repository;
 using University.Data.Repository.Base;
 using University.Data.UnitOfWork;
@@ -29,12 +31,25 @@ namespace University.Web.DependencyResolution {
                         {
                             x.Scan(scan =>
                                     {
+                                        //scan.Assembly("University.IoC");
                                         scan.TheCallingAssembly();
+                                        scan.WithDefaultConventions();
+                                        scan.LookForRegistries();
                                         scan.WithDefaultConventions();
                                     });
                        
                             x.For<IUnitOfWorkFactory>().Use<EFUnitOfWorkFactory>();
                             x.For(typeof(IRepository<>)).Use(typeof(EFRepository<>));
+                            x.For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
+                            x.For<System.Data.Entity.DbContext>().Use(() => new ApplicationDbContext());
+                            
+                            //x.For<ApplicationUser>().HttpContextScoped();
+                            //x.For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
+                            ////x.For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
+                            //x.For<System.Data.Entity.DbContext>().Use(() => new UniversityContext());
+                            //x.For<System.Data.Entity.DbContext>().Use(() => new ApplicationDbContext());
+                            //x.For(typeof (IUserStore<ApplicationUser>)).Use(typeof(UserStore<IdentityUser>));
+                            //x.For<UniversityContext>().HybridHttpOrThreadLocalScoped().Use<UniversityContext>();
 
                         });
             return ObjectFactory.Container;

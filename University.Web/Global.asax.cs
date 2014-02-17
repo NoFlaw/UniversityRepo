@@ -15,10 +15,13 @@ namespace University.Web
         {
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
-
             
+            //StructureMap is being called On Pre-Application Start see below:
+            //[assembly: WebActivator.PreApplicationStartMethod(typeof(University.Web.App_Start.StructuremapMvc), "Start")]
+
             ResourceManager.Initialize();
-            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory(new Container()));
+
+            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

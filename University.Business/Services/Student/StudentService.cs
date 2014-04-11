@@ -41,7 +41,7 @@ namespace University.Business
         public static bool Add(Student student)
         {
             if (String.IsNullOrEmpty(student.FirstName) || String.IsNullOrEmpty(student.LastName)) 
-                    return false;
+                return false;
             
             StudentRepository.Add(student);
             

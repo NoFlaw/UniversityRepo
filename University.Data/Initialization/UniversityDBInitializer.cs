@@ -203,9 +203,12 @@ namespace University.Data.Initialization
         static void AddOrUpdateInstructor(UniversityContext context, string courseTitle, string instructorName)
         {
             var crs = context.Courses.SingleOrDefault(c => c.Title == courseTitle);
-            var inst = crs.Instructors.SingleOrDefault(i => i.LastName == instructorName);
-            if (inst == null)
-                crs.Instructors.Add(context.Instructors.Single(i => i.LastName == instructorName));
+            if (crs != null)
+            {
+                var inst = crs.Instructors.SingleOrDefault(i => i.LastName == instructorName);
+                if (inst == null)
+                    crs.Instructors.Add(context.Instructors.Single(i => i.LastName == instructorName));
+            }
         }
     }
 }

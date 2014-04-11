@@ -9,7 +9,7 @@ namespace University.Web.Controllers
     public class StudentController : Controller
     {
         private static readonly UniversityContext Context = new UniversityContext();
-    
+        
         // GET: /Student/
         public ActionResult Index()
         {
